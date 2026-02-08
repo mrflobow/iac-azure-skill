@@ -8,7 +8,7 @@ This skill provides expert knowledge on creating, modifying, and adapting Terrag
 
 ## Overview
 
-This skill provides Florian's guidelines for creating consistent, professional IaC code. Use these guidelines when researching solutions or implementing changes. The projects use Terragrunt for deployment and state management, wrapping Terraform configuration. The primary provider is the AzureRM provider for Terraform.
+This skill provides guidelines for creating consistent, professional IaC code. Use these guidelines when researching solutions or implementing changes. The projects use Terragrunt for deployment and state management, wrapping Terraform configuration. The primary provider is the AzureRM provider for Terraform.
 
 The AI assistant should reference these guidelines whenever planning or creating code.
 
@@ -40,7 +40,7 @@ Apply these guidelines whenever:
 
 #### Testing Components
 
-- **`test/module_test.go`**: Executes Terraform tests using the Terragrunt provider.
+- **`test/module_test.go`**: Executes Terraform tests using Terratest.
 - **`test/env.hcl`**: Provides the basic setup for the test environment.
 - **`test/fixtures/terragrunt.hcl`**: Overrides `env.hcl` and configures the provider. Use this file to add additional fixed inputs for the test.
 
@@ -65,6 +65,14 @@ Apply these guidelines whenever:
 
 `env.hcl` has the basic setup for the environment such as Azure Provider and default Terragrunt state storage which is overridden by each product/component and is based on the folder path in `/live/<env>/product`.
 
-## Resources
+## References
 
-See the resources folder for logo files and font downloads.
+Consult the `references/terragrunt/` folder for comprehensive Terragrunt documentation:
+
+- **[Core Concepts](references/terragrunt/terragrunt-concepts.md)** - Fundamental concepts for working with Terragrunt
+- **[HCL Blocks](references/terragrunt/terragrunt-hcl-blocks.md)** - Configuration blocks that define structural configurations
+- **[HCL Attributes](references/terragrunt/terragrunt-hcl-attributes.md)** - Attributes for Terragrunt configuration such as inputs and operational settings
+- **[Functions](references/terragrunt/terragrunt-functions.md)** - Built-in Terragrunt functions for use in `terragrunt.hcl` files
+- **[CLI](references/terragrunt/terragrunt-cli.md)** - CLI commands for managing infrastructure at scale
+
+Read the relevant reference files before generating or modifying Terragrunt configurations.
