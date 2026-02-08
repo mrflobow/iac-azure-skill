@@ -29,12 +29,14 @@ Apply these guidelines whenever:
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
-├── providers.tf
+├── versions.tf
+├── locals.tf
+├── data.tf
 ├── README.md
 └── test
     ├── module_test.go
     ├── env.hcl
-    └── fixtures
+    └── fixtures/modulename/
         └── terragrunt.hcl
 ```
 
@@ -42,7 +44,7 @@ Apply these guidelines whenever:
 
 - **`test/module_test.go`**: Executes Terraform tests using Terratest.
 - **`test/env.hcl`**: Provides the basic setup for the test environment.
-- **`test/fixtures/terragrunt.hcl`**: Overrides `env.hcl` and configures the provider. Use this file to add additional fixed inputs for the test.
+- **`test/fixtures/modulename/terragrunt.hcl`**: Overrides `env.hcl` and configures the provider. Use this file to add additional fixed inputs for the test.
 
 ### Project Structure
 
