@@ -78,3 +78,12 @@ Consult the `references/terragrunt/` folder for comprehensive Terragrunt documen
 - **[CLI](references/terragrunt/terragrunt-cli.md)** - CLI commands for managing infrastructure at scale
 
 Read the relevant reference files before generating or modifying Terragrunt configurations.
+
+Consult the `references/terraform-provider-azurerm/` folder for AzureRM provider documentation:
+
+- **[Concepts](references/terraform-provider-azurerm/terraform-provider-azure-concepts.md)** - Provider configuration, authentication methods, and core concepts
+- **[HCL Blocks](references/terraform-provider-azurerm/terraform-provider-azure-blocks.md)** - Resource, data source, and block structure patterns for Azure resources
+- **[Functions](references/terraform-provider-azurerm/terraform-provider-azure-functions.md)** - Provider functions and common patterns (normalise_resource_id, parse_resource_id, etc.)
+- **[CLI](references/terraform-provider-azurerm/terraform-provider-azure-cli.md)** - Provider setup, authentication, and Terraform CLI usage with azurerm
+
+Read the relevant reference files before generating or modifying AzureRM provider configurations.
