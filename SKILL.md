@@ -85,5 +85,7 @@ Consult the `references/terraform-provider-azurerm/` folder for AzureRM provider
 - **[HCL Blocks](references/terraform-provider-azurerm/terraform-provider-azure-blocks.md)** - Resource, data source, and block structure patterns for Azure resources
 - **[Functions](references/terraform-provider-azurerm/terraform-provider-azure-functions.md)** - Provider functions and common patterns (normalise_resource_id, parse_resource_id, etc.)
 - **[CLI](references/terraform-provider-azurerm/terraform-provider-azure-cli.md)** - Provider setup, authentication, and Terraform CLI usage with azurerm
+- **[Modules](references/terraform-provider-azurerm/modules.md)** - Key Vault resource definitions, arguments, and child resources
+- **[Examples](references/terraform-provider-azurerm/examples.md)** - Practical Key Vault usage patterns and integration examples
 
 Read the relevant reference files before generating or modifying AzureRM provider configurations.
