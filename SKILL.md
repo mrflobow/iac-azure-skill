@@ -1,10 +1,8 @@
-## Metadata
+---
+name: iac-guidelines-for-terragrunt
+description: Comprehensive guide and assistant for Infrastructure as Code (IaC) using Terraform, Terragrunt, and the AzureRM provider. Provides best practices for project structure, block generation, and troubleshooting.
+---
 
-Name: IaC Guidelines for Terragrunt
-
-Description: Comprehensive guide and assistant for Infrastructure as Code (IaC) using Terraform, Terragrunt, and the AzureRM provider. Provides best practices for project structure, block generation, and troubleshooting.
-
-This skill provides expert knowledge on creating, modifying, and adapting Terragrunt projects. It includes a deep understanding of the AzureRM Provider API and can assist with any Terraform-related inquiries, from basic configuration to complex deployment scenarios.
 
 ## Overview
 
