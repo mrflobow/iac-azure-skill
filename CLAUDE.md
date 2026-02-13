@@ -12,13 +12,18 @@ This is a Claude Code skill that provides Infrastructure as Code (IaC) guideline
 ├── CLAUDE.md                         # Development guidelines (this file)
 └── references/
     ├── terragrunt/                   # Terragrunt documentation (concepts, blocks, attributes, functions, CLI)
-    └── terraform-provider-azurerm/   # AzureRM provider documentation
-        ├── terraform-provider-azure-concepts.md   # Provider config, auth, core concepts
-        ├── terraform-provider-azure-blocks.md      # Resource/data source block patterns
-        ├── terraform-provider-azure-functions.md   # Provider functions
-        ├── terraform-provider-azure-cli.md         # Provider setup and CLI usage
-        ├── modules.md                              # Resource definitions and arguments
-        └── examples.md                             # Practical usage patterns
+    ├── terraform-provider-azurerm/   # AzureRM provider documentation
+    │   ├── terraform-provider-azure-concepts.md   # Provider config, auth, core concepts
+    │   ├── terraform-provider-azure-blocks.md      # Resource/data source block patterns
+    │   ├── terraform-provider-azure-functions.md   # Provider functions
+    │   ├── terraform-provider-azure-cli.md         # Provider setup and CLI usage
+    │   ├── modules.md                              # Resource definitions and arguments
+    │   └── examples.md                             # Practical usage patterns
+    └── terratest/                    # Terratest documentation (testing IaC)
+        ├── terratest-concepts.md                    # Core concepts, lifecycle, options structs
+        ├── terratest-cli.md                         # Test execution commands and flags
+        ├── terratest-examples.md                    # Complete testing patterns
+        └── terratest-azure-helpers.md               # Azure-specific validation helpers
 ```
 
 ## How to Add New Modules

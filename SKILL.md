@@ -116,3 +116,12 @@ Consult the `references/terraform-provider-azurerm/` folder for AzureRM provider
 - **[Examples](references/terraform-provider-azurerm/examples.md)** - Practical usage patterns for Key Vault and Linux Web App
 
 Read the relevant reference files before generating or modifying AzureRM provider configurations.
+
+Consult the `references/terratest/` folder for Terratest documentation:
+
+- **[Concepts](references/terratest/terratest-concepts.md)** — Core concepts, test lifecycle, options structs, package overview
+- **[CLI](references/terratest/terratest-cli.md)** — Test execution commands, flags, utilities
+- **[Examples](references/terratest/terratest-examples.md)** — Complete testing patterns for Terraform, Terragrunt, and Azure
+- **[Azure Helpers](references/terratest/terratest-azure-helpers.md)** — Azure-specific validation functions and patterns
+
+Read the relevant reference files before writing or modifying Terratest tests.
