@@ -1,6 +1,8 @@
-# Key Vault Example Patterns
+# Example Patterns
 
-## Basic Key Vault with Access Policy
+## Key Vault Patterns
+
+### Basic Key Vault with Access Policy
 
 Minimal vault with inline access policy using access policy authorization model.
 
@@ -28,7 +30,7 @@ resource "azurerm_key_vault" "example" {
 
 ---
 
-## Key Vault with Secret
+### Key Vault with Secret
 
 Vault + secret storage pattern. Requires `Set`, `Get`, `Delete`, `Purge`, `Recover` secret permissions.
 
@@ -58,7 +60,7 @@ resource "azurerm_key_vault_secret" "example" {
 
 ---
 
-## Key Vault with Key and Rotation Policy
+### Key Vault with Key and Rotation Policy
 
 Vault + cryptographic RSA key with automatic rotation. Requires `premium` SKU for HSM keys. Key permissions must include `GetRotationPolicy` and `SetRotationPolicy` when using rotation policy.
 
@@ -103,7 +105,7 @@ resource "azurerm_key_vault_key" "example" {
 
 ---
 
-## Key Vault with Self-Signed Certificate
+### Key Vault with Self-Signed Certificate
 
 Generate a self-signed certificate via `certificate_policy`. Common for Service Fabric, App Gateway, and internal TLS.
 
@@ -172,7 +174,7 @@ resource "azurerm_key_vault_certificate" "example" {
 
 ---
 
-## Key Vault with Imported Certificate
+### Key Vault with Imported Certificate
 
 Import a PFX certificate. Use separate `azurerm_key_vault_access_policy` resources when multiple principals need access. The `certificate_policy` block with `issuer_parameters.name = "Unknown"` is required for imported certs.
 
@@ -230,7 +232,7 @@ resource "azurerm_app_service_certificate" "example" {
 
 ---
 
-## Customer-Managed Key (CMK) Pattern - Cosmos DB
+### Customer-Managed Key (CMK) Pattern - Cosmos DB
 
 Key Vault provides encryption keys for other Azure services. Pattern requires:
 - `premium` SKU (for HSM-backed keys)
@@ -293,7 +295,7 @@ resource "azurerm_cosmosdb_account" "example" {
 
 ---
 
-## Customer-Managed Key (CMK) Pattern - Databricks
+### Customer-Managed Key (CMK) Pattern - Databricks
 
 Databricks CMK uses `azurerm_databricks_workspace_root_dbfs_customer_managed_key`. The workspace managed identity needs Key Vault access, which requires creating the workspace first.
 
@@ -357,7 +359,7 @@ resource "azurerm_databricks_workspace_root_dbfs_customer_managed_key" "example"
 
 ---
 
-## Disk Encryption Set
+### Disk Encryption Set
 
 Key Vault provides encryption keys for managed disks via `azurerm_disk_encryption_set`. The disk encryption set's managed identity needs Key Vault access plus `Reader` role on the vault.
 
@@ -433,7 +435,7 @@ resource "azurerm_managed_disk" "example" {
 
 ---
 
-## Common Patterns Summary
+### Key Vault Common Patterns Summary
 
 | Pattern | SKU | Purge Protection | Key Permissions for Service |
 |---------|-----|------------------|-----------------------------|
@@ -442,3 +444,176 @@ resource "azurerm_managed_disk" "example" {
 | Imported cert | `standard` | Optional | N/A (certificate permissions) |
 | CMK (Cosmos DB, Databricks) | `premium` | **Required** | `Get`, `UnwrapKey`, `WrapKey` |
 | Disk encryption | `premium` | **Required** | `Get`, `UnwrapKey`, `WrapKey` + `Reader` role |
+
+---
+
+## Linux Web App Patterns
+
+### Basic Linux Web App with Python
+
+Resource group + service plan + Linux web app with Python runtime. This is the minimal pattern for deploying a Python web application.
+
+```hcl
+resource "azurerm_resource_group" "example" {
+  name     = "${var.prefix}-resources"
+  location = var.location
+}
+
+resource "azurerm_service_plan" "example" {
+  name                = "${var.prefix}-sp"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  os_type             = "Linux"
+  sku_name            = "S1"
+}
+
+resource "azurerm_linux_web_app" "example" {
+  name                = "${var.prefix}-example"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  service_plan_id     = azurerm_service_plan.example.id
+
+  site_config {
+    application_stack {
+      python_version = "3.9"
+    }
+  }
+}
+```
+
+---
+
+### Linux Web App with Node.js
+
+Same structure with Node.js 22 LTS runtime. Use `node_version` in the `application_stack` block.
+
+```hcl
+resource "azurerm_resource_group" "example" {
+  name     = "${var.prefix}-resources"
+  location = var.location
+}
+
+resource "azurerm_service_plan" "example" {
+  name                = "${var.prefix}-sp"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  os_type             = "Linux"
+  sku_name            = "S1"
+}
+
+resource "azurerm_linux_web_app" "example" {
+  name                = "${var.prefix}-example"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  service_plan_id     = azurerm_service_plan.example.id
+
+  site_config {
+    application_stack {
+      node_version = "22-lts"
+    }
+  }
+}
+```
+
+---
+
+### Linux Web App with Managed Identity and HTTPS
+
+Production-ready pattern with SystemAssigned identity, HTTPS enforcement, and app settings. The managed identity can be used for passwordless access to other Azure services.
+
+```hcl
+resource "azurerm_resource_group" "example" {
+  name     = "${var.prefix}-resources"
+  location = var.location
+}
+
+resource "azurerm_service_plan" "example" {
+  name                = "${var.prefix}-sp"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  os_type             = "Linux"
+  sku_name            = "P1v2"
+}
+
+resource "azurerm_linux_web_app" "example" {
+  name                = "${var.prefix}-example"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  service_plan_id     = azurerm_service_plan.example.id
+  https_only          = true
+
+  site_config {
+    always_on           = true
+    minimum_tls_version = "1.2"
+
+    application_stack {
+      dotnet_version = "8.0"
+    }
+  }
+
+  app_settings = {
+    "WEBSITE_RUN_FROM_PACKAGE" = "1"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    environment = "production"
+  }
+}
+```
+
+---
+
+### Linux Web App with Docker Container
+
+Deploy a custom Docker container from a registry. Use `docker_image_name` and `docker_registry_url` in the application stack.
+
+```hcl
+resource "azurerm_resource_group" "example" {
+  name     = "${var.prefix}-resources"
+  location = var.location
+}
+
+resource "azurerm_service_plan" "example" {
+  name                = "${var.prefix}-sp"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  os_type             = "Linux"
+  sku_name            = "P1v2"
+}
+
+resource "azurerm_linux_web_app" "example" {
+  name                = "${var.prefix}-example"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  service_plan_id     = azurerm_service_plan.example.id
+  https_only          = true
+
+  site_config {
+    always_on = true
+
+    application_stack {
+      docker_image_name   = "myapp:latest"
+      docker_registry_url = "https://${azurerm_container_registry.example.login_server}"
+    }
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+```
+
+---
+
+### Linux Web App Common Patterns Summary
+
+| Pattern | SKU | Runtime | Key Features |
+|---------|-----|---------|--------------|
+| Basic Python app | `S1` | Python 3.9 | Minimal setup |
+| Node.js app | `S1` | Node 22 LTS | Minimal setup |
+| Production app with identity | `P1v2` | Any | HTTPS, managed identity, always_on |
+| Docker container | `P1v2` | Custom image | Container registry, managed identity |

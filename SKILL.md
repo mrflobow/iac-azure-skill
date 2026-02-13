@@ -22,6 +22,10 @@ Apply these guidelines whenever:
 
 ### Module Structure
 
+#### Default (single fixture)
+
+When a module has one test scenario, use a single fixture named after the module:
+
 ```
 .
 ├── main.tf
@@ -38,11 +42,36 @@ Apply these guidelines whenever:
         └── terragrunt.hcl
 ```
 
+#### Multiple fixtures
+
+When a module supports multiple configurations or scenarios, create a fixture per scenario. Name each fixture `modulename_scenario`:
+
+```
+.
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── versions.tf
+├── locals.tf
+├── data.tf
+├── README.md
+└── test
+    ├── module_test.go
+    ├── env.hcl
+    └── fixtures/
+        ├── appservice_python/
+        │   └── terragrunt.hcl
+        └── appservice_java/
+            └── terragrunt.hcl
+```
+
+Each fixture directory contains its own `terragrunt.hcl` with the inputs specific to that scenario. The Go test file references each fixture path to run them independently.
+
 #### Testing Components
 
-- **`test/module_test.go`**: Executes Terraform tests using Terratest.
+- **`test/module_test.go`**: Executes Terraform tests using Terratest. When multiple fixtures exist, each scenario should have its own test function pointing to its fixture path.
 - **`test/env.hcl`**: Provides the basic setup for the test environment.
-- **`test/fixtures/modulename/terragrunt.hcl`**: Overrides `env.hcl` and configures the provider. Use this file to add additional fixed inputs for the test.
+- **`test/fixtures/<name>/terragrunt.hcl`**: Overrides `env.hcl` and configures the provider. Use this file to add additional fixed inputs for the test. For single-fixture modules, `<name>` is the module name. For multi-fixture modules, `<name>` follows the `modulename_scenario` convention.
 
 ### Project Structure
 
@@ -83,7 +112,7 @@ Consult the `references/terraform-provider-azurerm/` folder for AzureRM provider
 - **[HCL Blocks](references/terraform-provider-azurerm/terraform-provider-azure-blocks.md)** - Resource, data source, and block structure patterns for Azure resources
 - **[Functions](references/terraform-provider-azurerm/terraform-provider-azure-functions.md)** - Provider functions and common patterns (normalise_resource_id, parse_resource_id, etc.)
 - **[CLI](references/terraform-provider-azurerm/terraform-provider-azure-cli.md)** - Provider setup, authentication, and Terraform CLI usage with azurerm
-- **[Modules](references/terraform-provider-azurerm/modules.md)** - Key Vault resource definitions, arguments, and child resources
-- **[Examples](references/terraform-provider-azurerm/examples.md)** - Practical Key Vault usage patterns and integration examples
+- **[Modules](references/terraform-provider-azurerm/modules.md)** - Resource definitions for Key Vault, Linux Web App, and related resources
+- **[Examples](references/terraform-provider-azurerm/examples.md)** - Practical usage patterns for Key Vault and Linux Web App
 
 Read the relevant reference files before generating or modifying AzureRM provider configurations.
